@@ -1,0 +1,97 @@
+from tkinter import *
+import random
+
+
+words=["apple","banana","chips","orange","blue","green","red","elephant",
+       "guitar", "piano","computer", "keyboard", "ocean", "mountain",
+       "sunshine", "rainbow","umbrella", "candle", "soccer", "basketball",
+       "library", "garden","butterfly", "waterfall","television","telephone",
+       "sandwich","pizza","giraffe", "keyboard", "laptop", "backpack","robot",
+       "turtle", "diamond", "oxygen","planet","kangaroo","volcano","bicycle",
+       "helicopter", "caterpillar", "kitchen", "zoo", "octopus","sunflower", 
+       "fireworks", "camera", "microphone", "seashell","whale","dolphin",
+       "tiger","lighthouse","penguin","lemon","dragon","mermaid","crystal",
+       "raindrop","cloud", "moonlight", "starfish", "treasure","dragonfly", 
+       "illusion","fantasy", "whisper","mirage", "silence", "enchantment",
+       "charming", "mystery","harmony","fascinate","resonance"]
+word_to_guess=random.choice(words)
+word_guessed=["_"]*len(word_to_guess)
+root=Tk()
+attempts=0
+max_attempts=5
+root.title("Hangman")
+root.geometry("598x494")
+root.minsize(width=450,height=350)
+print(word_to_guess)
+error_alpha=Label(root)
+error_len=Label(root)
+def button1():
+    
+    global error_alpha
+    global attempts
+    global error_len
+    global mylabel
+    global attemptlabel
+    
+    error_alpha.config(text="")
+    error_len.config(text="")
+    
+    
+    if not guess.get().isalpha():
+        error_alpha.config(text="Please enter alphabet only")
+        error_alpha.grid(row=1,column=1)
+        guess.delete(0,END)
+    if len(guess.get()) > 1:
+        error_len.config(text="Please enter only one character")
+        error_len.grid(row=1,column=1)
+        guess.delete(0,END)
+    if guess.get() in word_to_guess:
+        for i in range(len(word_to_guess)):
+            if guess.get()==word_to_guess[i]:
+                word_guessed[i]=guess.get()
+        mylabel=Label(root,text=word_guessed)
+        mylabel.grid(row=0,column=0)
+        guess.delete(0,END)
+        
+    else:
+        attempts+=1
+        guess.delete(0,END)
+        attemptlabel=Label(root,text=("attempts ",attempts,"/",max_attempts))
+        attemptlabel.grid(row=0,column=1)
+        
+    if attempts == max_attempts:
+        attemptlabel=Label(root,text=("attempts ",attempts,"/",max_attempts))
+        attemptlabel.grid(row=0,column=1)
+        mylabel.destroy()
+        guess.destroy()
+        attemptlabel.destroy()
+        button.destroy()
+        victory=Label(root,text="You Lost")
+        victory.grid(row=2,column=1)
+        
+    if "_" not in word_guessed:
+        mylabel=Label(root,text=word_guessed)
+        mylabel.grid(row=0,column=0)
+        mylabel.config(text="")
+        mylabel.destroy()
+        guess.destroy()
+        attemptlabel.destroy()
+        button.destroy()
+        victory=Label(root,text="You Won")
+        victory.grid(row=2,column=1)
+   
+        
+mylabel=Label(root,text=word_guessed)
+mylabel.grid(row=0,column=0)
+
+attemptlabel=Label(root,text=("attempts ",attempts,"/",max_attempts))
+attemptlabel.grid(row=0,column=1)
+
+
+guess=Entry(root,width=3)
+guess.grid(row=1,column=0)
+
+button=Button(root,command=button1)
+button.grid(row=2,column=0)
+
+root.mainloop()
